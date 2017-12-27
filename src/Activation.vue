@@ -1,26 +1,26 @@
 <template>
   <div>
 
-    <app-search-bar v-on:searchStudent="searchStudent($event)"></app-search-bar>
+    <app-search-bar v-on:searchStudent="searchStudent($event)" v-bind:isSearchLoading="isSearchLoading"></app-search-bar>
     <student-da v-bind:studentNo="studentNo" v-on:studentQueried="studentQueried($event)"></student-da>
 
-    <div  id="content" class="container hidden" style="margin-top: 16px">
+    <div  id="content" class="container" v-bind:class="{hidden: isHidden}" style="margin-top: 16px">
       <div class="card" id="result">
 
         <div class="row" style="margin: auto;">
           <div class="col s12 l4" style="text-align: center;">
-            <img id="dp" src="assets/ic_avatar.png" class="responsive-img circle" style="width: 240px; height: 240px; margin: 32px;">
+            <img id="dp" src="assets/ic_avatar.png" v-bind:src="dp" class="responsive-img circle" style="width: 240px; height: 240px; margin: 32px;">
           </div>
           <div class="col s12 l8" style="padding-left: 32px; padding-top: 16px; padding-bottom: 32px">
 
-            <h4 class="material-text" id="name"></h4>
-            <h5 class="material-text" id="student_no"></h5>
-            <h5 class="material-text" id="program"></h5>
-            <h5 class="material-text" id="year"></h5>
-            <h5 class="material-text" id="section"></h5>
-            <p id="guardian"></p>
-            <p id="phone"></p>
-            <p id="address"></p>
+            <h4 class="material-text" id="name">{{fullName}}</h4>
+            <h5 class="material-text" id="student_no">{{studentNo}}</h5>
+            <h5 class="material-text" id="program">{{program}}</h5>
+            <h5 class="material-text" id="year">{{year}}</h5>
+            <h5 class="material-text" id="section">{{section}}</h5>
+            <p id="guardian">{{guardian}}</p>
+            <p id="phone">{{phone}}</p>
+            <p id="address">{{address}}</p>
 
           </div>
 
@@ -71,21 +71,47 @@ export default {
   name: 'activation',
   data () {
     return {
-      studentNo: this.activationStudentNo
+      studentNo: this.activationStudentNo,
+      fullName: '',
+      program:'',
+      year:'',
+      section:'',
+      guardian:'',
+      phone:'',
+      address:'',
+      dp:'',
+
+      //bound to the search result
+      isHidden: true,
+      //bound to the search bar. true if result is loading
+      isSearchLoading: false
     }
   },
   methods: {
-    studentQueried(student) {
-      if(student!=null)
-        console.log(student);
-      else
+    studentQueried(s) {
+      if(s!=null){
+        console.log(s);
+        this.fullName = s.last_name + ', ' + s.first_name + ' '  + s.middle_name;
+        this.program = s.program;
+        this.year = s.year;
+        this.section = s.section;
+        this.guardian = 'Guardian: ' + s.guardian_name;
+        this.phone = 'Phone Number: ' + s.guardian_phone;
+        this.address = 'Address:' + s.guardian_address;
+        this.dp = s.img_url;
+        this.isHidden = false;
+      }
+      else {
         Materialize.toast('No result found', 2000);
+      }
+      this.isSearchLoading = false;
     },
     searchStudent(studentNo) {
       //update the student number using the event from the search app-search-bar
       //the studentDA has a prop that watches the value of student_no
       //if it is changed, the query will run
       this.studentNo = studentNo;
+      this.isSearchLoading = true;
     }
   },
   mounted() {

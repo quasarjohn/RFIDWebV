@@ -8,7 +8,7 @@
       style="margin-bottom: 20px; margin-right: 10px" @click="searchStudent()">search
       </i>
     </div>
-    <div id="data_progress" class="progress hidden" style="margin-top: -24px">
+    <div id="data_progress" class="progress" v-bind:class="{hidden: !isSearchLoading}" style="margin-top: -24px">
       <div class="indeterminate"></div>
     </div>
   </div>
@@ -16,6 +16,7 @@
 
 <script>
 export default {
+  props:['isSearchLoading'],
   name: 'app-search-bar',
   data () {
     return {
