@@ -1,7 +1,8 @@
 <template>
   <div>
 
-    <app-search-bar></app-search-bar>
+    <app-search-bar v-on:searchStudent="searchStudent($event)"></app-search-bar>
+    <student-da v-bind:studentNo="studentNo" v-on:studentQueried="studentQueried($event)"></student-da>
 
     <div  id="content" class="container hidden" style="margin-top: 16px">
       <div class="card" id="result">
@@ -59,19 +60,42 @@
       </div>
     </div>
 
+
   </div>
 
 </template>
 
 <script>
 export default {
+  props:['activationStudentNo'],
   name: 'activation',
   data () {
     return {
-
+      studentNo: this.activationStudentNo
     }
   },
+  methods: {
+    studentQueried(student) {
+      if(student!=null)
+        console.log(student);
+      else
+        Materialize.toast('No result found', 2000);
+    },
+    searchStudent(studentNo) {
+      //update the student number using the event from the search app-search-bar
+      //the studentDA has a prop that watches the value of student_no
+      //if it is changed, the query will run
+      this.studentNo = studentNo;
+    }
+  },
+  mounted() {
+    if(this.activationStudentNo.length > 0) {
+      //TODO search student
+    }
+  }
 }
+
+
 </script>
 
 <style>

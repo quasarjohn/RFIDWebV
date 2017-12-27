@@ -8,6 +8,9 @@ import AddStudent from './AddStudent.vue'
 import Activation from './Activation.vue'
 import MonitoringHistory from './History.vue'
 
+import StudentDA from './data_access/StudentDA.vue'
+
+
 Vue.component('app-nav', AppNav);
 Vue.component('app-search-bar', SearchBar);
 Vue.component('home', Home)
@@ -15,6 +18,8 @@ Vue.component('monitoring', Monitoring)
 Vue.component('addstudent', AddStudent)
 Vue.component('activation', Activation)
 Vue.component('history', MonitoringHistory)
+
+Vue.component('student-da', StudentDA)
 
 var app = new Vue({
   el: '#app',

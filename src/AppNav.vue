@@ -4,11 +4,11 @@
 			<div class="nav-wrapper color-primary">
 			  <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 		    <ul id="nav-mobile" class="left hide-on-med-and-down">
-		    	<li class="active"><a href="index.html">Home</a></li>
-        	<li><a @click="tabchange('addstudent')">Add Student</a></li>
-        	<li><a @click="tabchange('activation')">ID Activation</a></li>
-        	<li><a @click="tabchange('monitoring')">Monitoring</a></li>
-        	<li><a @click="tabchange('history')">Monitoring History</a></li>
+		    	<li><a @click="tabChange('home')">Home</a></li>
+        	<li><a @click="tabChange('addstudent')">Add Student</a></li>
+        	<li><a @click="tabChange('activation')">ID Activation</a></li>
+        	<li><a @click="tabChange('monitoring')">Monitoring</a></li>
+        	<li><a @click="tabChange('history')">Monitoring History</a></li>
 				</ul>
 
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
@@ -49,9 +49,9 @@ export default {
     }
   },
   methods: {
-    tabchange: function(page) {
+    tabChange: function(page) {
       console.log('x')
-      this.$emit('tabchange', page);
+      this.$emit('tabChange', page);
     }
   }
 }
