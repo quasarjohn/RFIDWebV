@@ -12,7 +12,7 @@ export default {
   methods: {
     queryLatestStudentNo() {
       var database = firebase.database();
-      database.ref('student_no').once('value').then((student_no) => {
+      database.ref('student_no').on('value', (student_no) => {
         this.$emit('lastStudentNoLoaded', parseInt(student_no.val()) + 1);
       });
     }

@@ -28,8 +28,12 @@ export default {
       var database = firebase.database();
       if(this.isEdit)
         database.ref('students/' + this.student.key).set(this.student);
-      else
+      else {
         database.ref('students').push().set(this.student);
+        database.ref('student_no').set(this.student.student_no);
+      }
+
+      console.log(this.student)
     }
   },
   watch: {

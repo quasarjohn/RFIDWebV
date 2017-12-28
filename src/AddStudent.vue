@@ -79,7 +79,7 @@
               <label for="guardian-address">Address</label>
             </div>
             <div class="col s12 l12" style="text-align: right;"><a
-              @click="addStudent()"
+              @click="showAddConfirmation()"
               class="center-align waves-effect waves-light btn-large"
               style="background:#ffad33; margin-top:20px; margin-left:5px" id="save_btn">
               SAVE
@@ -89,13 +89,14 @@
         </form>
       </div>
 
-      <div id="save_modal" class="modal">
+      <div id="save_modal" class="modal" style="text-align:left">
         <div class="modal-content">
           <h4 id="title">Save Data?</h4>
           <p id="subtitle">Make sure you have double checked the data before saving it.</p>
         </div>
         <div class="modal-footer">
-          <a  id="save_btn" class="modal-action modal-close waves-effect waves-green btn-flat">SAVE</a>
+          <a  id="save_btn" class="modal-action modal-close waves-effect
+          waves-green btn-flat" @click="addStudent()">SAVE</a>
         </div>
       </div>
 
@@ -115,6 +116,10 @@ export default {
     }
   },
   methods: {
+    showAddConfirmation() {
+      console.log('CONFIRMATION')
+      $('#save_modal').modal('open');
+    },
     addStudent() {
 
       var r = this.$refs;
@@ -135,22 +140,27 @@ export default {
 				guardian_phone: r.guardian_phone.value,
 				guardian_address: r.guardian_address.value,
 				date_added: new Date().getTime(),
-				student_no: this.studentToEdit.student_no,
-        key: this.studentToEdit.key,
-        img_url: this.studentToEdit.img_url
+				student_no: this.isEdit? this.studentToEdit.student_no: this.student_no,
+        key: this.isEdit? this.studentToEdit.key: null,
+        img_url: this.isEdit? this.studentToEdit.img_url: null
 			}
 
       //this data is bound to props in student DA
       //student will be inserted to database when it is changed
       this.student = s;
+
+      for(var ref in r) {
+        r[ref].value = '';
+      }
     },
     //this is an int, already incremented
     lastStudentNoLoaded(student_no) {
-      console.log(student_no);
       this.student_no =  student_no;
     }
   },
   mounted() {
+    $('.modal').modal();
+
     this.$refs.last_name.focus();
     if(this.studentToEdit != '') {
       this.isEdit = true;
