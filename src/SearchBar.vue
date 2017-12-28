@@ -28,6 +28,8 @@ export default {
     }
   },
   mounted() {
+    this.$refs.searchfield.focus();
+
     if(this.content != undefined)
       this.$refs.searchfield.value = this.content;
   }

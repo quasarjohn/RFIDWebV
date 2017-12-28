@@ -10,6 +10,10 @@
     v-bind:studentNo="studentNo"
     v-on:studentQueried="studentQueried($event)"
     />
+    <imageuploader-da
+      v-bind:fileObject="fileObject"
+      v-on:imageUploaded="onImageUploaded($event)"
+    />
 
     <div  id="content" class="container" v-bind:class="{hidden: isHidden}" style="margin-top: 16px">
       <div class="card" id="result">
@@ -37,10 +41,8 @@
             <i style="margin:auto;" class="material-icons md-24 md-light clickable-icon" @click="registerRfid()">fingerprint</i>
             <i style="margin:auto;" class="material-icons md-24 md-light clickable-icon" @clck="disableRfid()">delete</i>
           </div>
-
         </div>
       </div>
-
     </div>
 
     <!-- Modal Structure -->
@@ -53,9 +55,8 @@
           <input id="rfid_input" type="text" style="height: 0px; width: 0px; opacity: 0%;">
         </div>
       </div>
-      <input type="file" name="image" id="img_chooser" style="display: none;" />
+      <input type="file" name="image" id="img_chooser" ref="img_chooser" style="display: none;" @change="onFileChanged()" />
     </div>
-
 
     <div id="lock_modal" class="modal">
       <div class="modal-content">
@@ -66,8 +67,6 @@
         <a  id="save_btn" class="modal-action modal-close waves-effect waves-green btn-flat">DISABLE</a>
       </div>
     </div>
-
-
   </div>
 
 </template>
@@ -93,7 +92,10 @@ export default {
       //bound to the search bar. true if result is loading
       isSearchLoading: false,
 
-      student: ''
+      student: '',
+
+      //bound to imageUploaderDA
+      fileObject: ''
     }
   },
   methods: {
@@ -130,13 +132,25 @@ export default {
       this.$emit('editStudent', this.student);
     },
     updateImage() {
-
+      this.$refs.img_chooser.click();
     },
     registerRfid() {
 
     },
     disableRfid() {
 
+    },
+    onFileChanged() {
+      //bound to imaguploaderDA
+      //when file is selected, change it here and it will upload via props
+      this.fileObject = {
+        file: this.$refs.img_chooser.files[0],
+        key: this.student.key
+      }
+
+    },
+    onImageUploaded(url) {
+      this.dp = url;
     }
   },
   mounted() {
