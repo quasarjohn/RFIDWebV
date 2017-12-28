@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  props:['studentNo', 'student'],
+  props:['studentNo', 'student', 'isEdit'],
   name: 'student-da',
   data () {
     return {
@@ -19,14 +19,17 @@ export default {
             let student = null;
             students.forEach(function(s) {
               student = s.val();
+              student.key = Object.keys(students.val())[0];
             });
             this.$emit('studentQueried', student);
           });
     },
     addStudent() {
-      console.log(this.student)
       var database = firebase.database();
-      database.ref('students').push().set(this.student);
+      if(this.isEdit)
+        database.ref('students/' + this.student.key).set(this.student);
+      else
+        database.ref('students').push().set(this.student);
     }
   },
   watch: {

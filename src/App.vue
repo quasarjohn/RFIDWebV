@@ -2,10 +2,12 @@
     <div>
       <app-nav v-on:tabChange="tabChange($event)"></app-nav>
       <component
-        v-bind:activationStudentNo = "activationStudentNo"
+        v-bind:activationStudentNo="activationStudentNo"
+        v-bind:studentToEdit="studentToEdit"
         v-bind:is="activeComponent"
         v-on:tabChange="tabChange($event)"
         v-on:searchStudentFromHome="searchStudentFromHome($event)"
+        v-on:editStudent="editStudent($event)"
       />
     </div>
 </template>
@@ -16,7 +18,9 @@ export default {
   data () {
     return {
       activationStudentNo: '',
-      activeComponent: 'home'
+      activeComponent: 'home',
+
+      studentToEdit: ''
     }
   },
   methods: {
@@ -28,6 +32,10 @@ export default {
       //search bar in the home page
       this.activationStudentNo = student_no;
       this.activeComponent = 'activation';
+    },
+    editStudent(student) {
+      this.studentToEdit = student;
+      this.activeComponent = 'addstudent';
     }
   }
 }

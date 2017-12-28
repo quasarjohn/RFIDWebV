@@ -1,8 +1,15 @@
 <template>
   <div>
 
-    <app-search-bar v-on:searchStudent="searchStudent($event)" v-bind:isSearchLoading="isSearchLoading"></app-search-bar>
-    <student-da v-bind:studentNo="studentNo" v-on:studentQueried="studentQueried($event)"></student-da>
+    <app-search-bar
+    v-on:searchStudent="searchStudent($event)"
+    v-bind:isSearchLoading="isSearchLoading"
+    v-bind:content="studentNo"
+    />
+    <student-da
+    v-bind:studentNo="studentNo"
+    v-on:studentQueried="studentQueried($event)"
+    />
 
     <div  id="content" class="container" v-bind:class="{hidden: isHidden}" style="margin-top: 16px">
       <div class="card" id="result">
@@ -25,10 +32,10 @@
           </div>
 
           <div class="col s12 l12 color-primary valign-wrapper" style="height: 60px; text-align: center; padding-left: 200px; padding-right: 200px">
-            <i style="margin:auto;" class="material-icons md-24 md-light clickable-icon">edit</i>
-            <i style="margin:auto;" class="material-icons md-24 md-light clickable-icon">camera</i>
-            <i id="fingerprint" style="margin:auto;" class="material-icons md-24 md-light clickable-icon">fingerprint</i>
-            <i id="delete_img" style="margin:auto;" class="material-icons md-24 md-light clickable-icon">delete</i>
+            <i style="margin:auto;" class="material-icons md-24 md-light clickable-icon" @click="edit()">edit</i>
+            <i style="margin:auto;" class="material-icons md-24 md-light clickable-icon" @click="updateImage()">camera</i>
+            <i style="margin:auto;" class="material-icons md-24 md-light clickable-icon" @click="registerRfid()">fingerprint</i>
+            <i style="margin:auto;" class="material-icons md-24 md-light clickable-icon" @clck="disableRfid()">delete</i>
           </div>
 
         </div>
@@ -84,12 +91,18 @@ export default {
       //bound to the search result
       isHidden: true,
       //bound to the search bar. true if result is loading
-      isSearchLoading: false
+      isSearchLoading: false,
+
+      student: ''
     }
   },
   methods: {
     studentQueried(s) {
       if(s!=null){
+        //I assign the value of so I can pass it to the AddStudent page for
+        //editing through an event
+        this.student = s;
+
         console.log(s);
         this.fullName = s.last_name + ', ' + s.first_name + ' '  + s.middle_name;
         this.program = s.program;
@@ -112,11 +125,25 @@ export default {
       //if it is changed, the query will run
       this.studentNo = studentNo;
       this.isSearchLoading = true;
+    },
+    edit() {
+      this.$emit('editStudent', this.student);
+    },
+    updateImage() {
+
+    },
+    registerRfid() {
+
+    },
+    disableRfid() {
+
     }
   },
   mounted() {
-    if(this.activationStudentNo.length > 0) {
-      //TODO search student
+    //on page load,try to query a student
+    if(this.activationStudentNo.length != 0) {
+      this.isSearchLoading = true;
+      console.log(this.$children[1].queryStudent(this.activationStudentNo));
     }
   }
 }

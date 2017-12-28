@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  props:['isSearchLoading'],
+  props:['isSearchLoading', 'content'],
   name: 'app-search-bar',
   data () {
     return {
@@ -24,9 +24,12 @@ export default {
   },
   methods: {
     searchStudent() {
-      let student_no = this.$refs.searchfield.value;
-      this.$emit('searchStudent', student_no);
+      this.$emit('searchStudent', this.$refs.searchfield.value);
     }
+  },
+  mounted() {
+    if(this.content != undefined)
+      this.$refs.searchfield.value = this.content;
   }
 }
 </script>

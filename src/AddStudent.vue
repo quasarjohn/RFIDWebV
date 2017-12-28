@@ -2,7 +2,7 @@
     <div style="text-align:center">
 
       <!-- responsible for adding new student -->
-      <student-da v-bind:student="student"></student-da>
+      <student-da v-bind:student="student" v-bind:isEdit="isEdit"></student-da>
       <!-- for listening to the latest student number -->
       <studentno-da v-on:lastStudentNoLoaded="lastStudentNoLoaded($event)"></studentno-da>
 
@@ -104,11 +104,14 @@
 
 <script>
 export default {
+  props: ['studentToEdit'],
   name: 'app',
   data () {
     return {
       student: '',
-      student_no: 1000
+      student_no: 1000,
+
+      isEdit: false
     }
   },
   methods: {
@@ -132,7 +135,9 @@ export default {
 				guardian_phone: r.guardian_phone.value,
 				guardian_address: r.guardian_address.value,
 				date_added: new Date().getTime(),
-				student_no: this.student_no
+				student_no: this.studentToEdit.student_no,
+        key: this.studentToEdit.key,
+        img_url: this.studentToEdit.img_url
 			}
 
       //this data is bound to props in student DA
@@ -147,6 +152,35 @@ export default {
   },
   mounted() {
     this.$refs.last_name.focus();
+    if(this.studentToEdit != '') {
+      this.isEdit = true;
+
+      let r = this.$refs;
+      let s = this.studentToEdit;
+
+      this.student_no = s.student_no;
+
+      r.last_name.value = s.last_name;
+      r.first_name.value = s.first_name;
+      r.middle_name.value = s.middle_name;
+      r.address.value = s.address;
+      r.phone.value = s.phone_number;
+      r.birth_date.value = s.birth_date;
+      r.civil_status.value = s.civil_status;
+      r.nationality.value = s.nationality;
+      r.section.value = s.section;
+      r.program.value = s.program;
+      r.year.value = s.year;
+      r.guardian.value = s.guardian_name;
+      r.guardian_phone.value = s.guardian_phone;
+      r.guardian_address.value = s.guardian_address;
+
+      for(var prop in r) {
+        r[prop].focus();
+      }
+
+      r.last_name.focus();
+    }
   }
 }
 </script>
